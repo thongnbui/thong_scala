@@ -1,6 +1,9 @@
 import scala.io.StdIn.{readLine, readInt}
 import scala.collection.mutable.ArrayBuffer
 import scala.math._
+import java.io.PrintWriter
+import scala.io.Source
+
 
 /**
  * http://www.newthinktank.com/2015/08/learn-scala-one-video/
@@ -250,13 +253,53 @@ object ScalaTutorial {
     println(superman.hitByBullet)
     println(superman.ricochet(2500))
     
-    // Higher order functions: function can be passed as variable
+    // --- Higher order functions: function can be passed as variable
     val log10Func = log10 _
-    print(log10Func(1000))
-    
+
+    println(log10Func(1000)) 
     List(100.0, 1000.0).map(log10Func).foreach(println)
+    List(1,2,3,4,5).map((x: Int) => x * 50).foreach(println)
+    // filter
+    List(1,2,3,4,5).filter(_ % 2 == 0).foreach(println)
+    
+    def times(num: Int, factor: Int) = num * factor
+    // func is a function receives Int and returns Double
+    def multIt(func: (Int, Int) => Double, num: Int, fact: Int) = {
+      func(num, fact)
+    }
+    printf("3 * 100 = %.1f\n", multIt(times, 100, 3))
+    
+    // Closure: function depends on value outside of it
+    // Q: Is this a good idea?
+    val divisorVal = 5
+    val divisor5 = (num: Double) => num / divisorVal
+    println("15/5 = %.1f".format(divisor5(15)))
+    
+    // --------------- FIle IO ----------------------
+    val writer = new PrintWriter("test.txt")
+    writer.write("Hello dear!\n")
+    writer.write("How are you?\n")
+    writer.close()
+    
+    val textFromFile = Source.fromFile("test.txt", "UTF-8")
+    val lineIterator = textFromFile.getLines
+    for (line <- lineIterator)
+      println(line)
+    textFromFile.close()
     
     
+    def divideNums(num1: Int, num2: Int) = try 
+    {
+      (num1 / num2)
+    }
+    catch {
+      case ex: java.lang.ArithmeticException => "Can't divide by %d".format(num2)
+    }
+    finally {
+      // clean
+    }
+    
+    println("3/0 = " + divideNums(3,0))
   }
   // ---------- INHERITANCE ----------
   // A class that inherits from another gains all its fields and methods
